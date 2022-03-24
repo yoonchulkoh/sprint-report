@@ -14,13 +14,13 @@ ZENHUB_ACCESS_TOKEN = ENV['ZENHUB_ACCESS_TOKEN']
 PERSONAL_ACCESS_TOKEN = ENV['PERSONAL_ACCESS_TOKEN']
 REPOSITORY_NAME = ENV['REPOSITORY_NAME']
 LABEL_NAME = ENV['LABEL_NAME']
+PIPELINES = ENV['PIPELINES'].split(',')
 
 def main
   json = get_pipelines
 
-  pipelines = ['Sprint Backlog', 'In Progress', 'Review/QA', 'Done']
   json['pipelines']
-    .select { |p| pipelines.include?(p['name']) }
+    .select { |p| PIPELINES.include?(p['name']) }
     .each do |p|
     puts "### #{p['name']}"
     p['issues'].each do |issue|
