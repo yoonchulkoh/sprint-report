@@ -25,6 +25,8 @@ def main
     puts "### #{p['name']}"
     p['issues'].each do |issue|
       issue_obj = get_issue issue['issue_number']
+      next if pr?(issue_obj)
+
       puts "##{issue_obj.number} #{issue_obj.title}" if issue_obj.labels.map(&:name).include?(LABEL_NAME)
     end
     puts ''
@@ -56,6 +58,10 @@ def get_issue(issue_number)
   repo = client.repo REPOSITORY_NAME
   rel = repo.rels[:issues]
   rel.get(uri: { number: issue_number }).data
+end
+
+def pr?(issue)
+  issue['pull_request'] != nil
 end
 
 main
